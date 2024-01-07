@@ -19,11 +19,14 @@
         public NestedProjGlobalSection(string line, string section, string solution)
             : base(line, section, solution) { }
 
-        internal void Add(NestedProj config)
+        internal bool TryAdd(NestedProj config)
         {
             // The element is expected to be only once in the configuration file.
-            m_NestedConfig.Add(config.Element, config);
-            AddLine(config);
+            if (m_NestedConfig.TryAdd(config.Element, config)) {
+                AddLine(config);
+                return true;
+            }
+            return false;
         }
     }
 }
