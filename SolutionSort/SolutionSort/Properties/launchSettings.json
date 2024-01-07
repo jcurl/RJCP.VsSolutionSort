@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "SolutionSort": {
+      "commandName": "Project",
+      "commandLineArgs": "C:\\Users\\jcurl\\Documents\\Programming\\rjcp.base\\RJCP.Framework.sln",
+      "hotReloadEnabled": false
+    }
+  }
+}

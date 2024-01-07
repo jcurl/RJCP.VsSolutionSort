@@ -42,6 +42,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Include="Parser\EndGlobalParse.cs" />
+    <Compile Include="Parser\EndGlobalSectionParse.cs" />
+    <Compile Include="Parser\Global.cs" />
+    <Compile Include="Parser\GlobalParse.cs" />
+    <Compile Include="Parser\EndProjectParse.cs" />
+    <Compile Include="Parser\GlobalSection.cs" />
+    <Compile Include="Parser\GlobalSectionParse.cs" />
+    <Compile Include="Parser\IParseLine.cs" />
+    <Compile Include="Parser\ISection.cs" />
+    <Compile Include="Parser\Line.cs" />
+    <Compile Include="Parser\LineParse.cs" />
+    <Compile Include="Parser\LineType.cs" />
+    <Compile Include="Parser\NestedProj.cs" />
+    <Compile Include="Parser\NestedProjGlobalSection.cs" />
+    <Compile Include="Parser\NestedProjParse.cs" />
+    <Compile Include="Parser\ProjConfig.cs" />
+    <Compile Include="Parser\ProjConfigGlobalSection.cs" />
+    <Compile Include="Parser\ProjConfigParse.cs" />
+    <Compile Include="Parser\Project.cs" />
+    <Compile Include="Parser\ProjectParse.cs" />
+    <Compile Include="Parser\Projects.cs" />
+    <Compile Include="Parser\SectionList.cs" />
+    <Compile Include="Parser\Solution.cs" />
+    <Compile Include="Parser\TextBlock.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
 
