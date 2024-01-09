@@ -28,5 +28,14 @@
             }
             return false;
         }
+
+        /// <summary>
+        /// Gets the project mapping a <see cref="Guid"/> to a read only list of <see cref="ProjConfig"/>.
+        /// </summary>
+        /// <value>The project map.</value>
+        /// <remarks>
+        /// This allows mapping a GUID to the configuration lines in the solution file.
+        /// </remarks>
+        public IReadOnlyDictionary<Guid, NestedProj> ProjectMap { get { return m_NestedConfig; } }
     }
 }

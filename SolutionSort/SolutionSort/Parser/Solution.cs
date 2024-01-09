@@ -94,7 +94,6 @@
                 if (line == null) return;
 
                 if (IsLineType(LineType.Project, line, out Project project)) {
-                    Console.WriteLine($"{project}");
                     await ParseProject(reader, project);
                 } else if (IsLineType(LineType.Global, line, out Global global)) {
                     await ParseGlobal(reader, global);

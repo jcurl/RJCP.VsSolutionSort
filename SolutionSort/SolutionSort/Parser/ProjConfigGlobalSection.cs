@@ -8,7 +8,7 @@
     /// </summary>
     internal class ProjConfigGlobalSection : GlobalSection
     {
-        private readonly Dictionary<Guid, List<ProjConfig>> m_KeyConfigs = new();
+        private readonly Dictionary<Guid, IReadOnlyList<ProjConfig>> m_KeyConfigs = new();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ProjConfigGlobalSection"/> class.
@@ -21,7 +21,7 @@
 
         internal void Add(ProjConfig config)
         {
-            if (m_KeyConfigs.TryGetValue(config.Element, out List<ProjConfig> lines)) {
+            if (m_KeyConfigs.TryGetValue(config.Element, out IReadOnlyList<ProjConfig> lines)) {
                 if (lines == null) {
                     // This shouldn't happen, unless the element was somehow added without new initialisation, which the
                     // 'else' statement does.
@@ -32,8 +32,17 @@
                 lines = new List<ProjConfig>();
                 m_KeyConfigs.Add(config.Element, lines);
             }
-            lines.Add(config);
+            ((List<ProjConfig>)lines).Add(config);
             AddLine(config);
         }
+
+        /// <summary>
+        /// Gets the project mapping a <see cref="Guid"/> to a read only list of <see cref="ProjConfig"/>.
+        /// </summary>
+        /// <value>The project map.</value>
+        /// <remarks>
+        /// This allows mapping a GUID to the configuration lines in the solution file.
+        /// </remarks>
+        public IReadOnlyDictionary<Guid, IReadOnlyList<ProjConfig>> ProjectMap { get { return m_KeyConfigs; } }
     }
 }
