@@ -146,7 +146,7 @@
 
         private IEnumerable<Project> GetRootElements(Projects projects, NestedProjGlobalSection nested)
         {
-            if (nested == null) return projects.ProjectList.OrderBy(i => i.Key);  // TODO Custom sort
+            if (nested == null) return projects.ProjectList.OrderBy(i => i.Key);
 
             var nestedGuids =
                 from item in nested.Lines
@@ -188,53 +188,84 @@
         }
         #endregion
 
-        public void WriteAsync(string fileName)
+        public async Task WriteAsync(string fileName)
         {
-            // For now we just write it to the console, until we get it implemented.
+            if (m_Solution.Sections.Count == 0)
+                throw new InvalidOperationException("Solution not loaded");
 
-            // Dump the solution
+            using var fs = new FileStream(fileName, FileMode.Create, FileAccess.Write, FileShare.None);
+            await WriteAsync(fs);
+        }
+
+        public async Task WriteAsync(Stream file)
+        {
+            if (m_Solution.Sections.Count == 0)
+                throw new InvalidOperationException("Solution not loaded");
+
+            using var writer = new StreamWriter(file);
+            await WriteAsync(writer);
+        }
+
+        public async Task WriteAsync(TextWriter writer)
+        {
+            if (m_Solution.Sections.Count == 0)
+                throw new InvalidOperationException("Solution not loaded");
+
             foreach (ISection section in m_Solution.Sections) {
                 if (section is TextBlock textBlock) {
                     foreach (Line line in textBlock.Lines) {
-                        Console.WriteLine(line.ToString());
+                        await writer.WriteLineAsync(line.ToString());
                     }
-                } else if (section is Projects projects) {
+                } else if (section is Projects) {
                     // Instead of `projects.ProjectList`, we dump our sorted list
                     foreach (Project project in m_SortedProjects) {
-                        Console.WriteLine(project.ToString());
+                        await writer.WriteLineAsync(project.ToString());
                         foreach (Line line in project.Lines) {
-                            Console.WriteLine(line);
+                            await writer.WriteLineAsync(line.ToString());
                         }
                     }
                 } else if (section is Global global) {
-                    Console.WriteLine(global.ToString());
+                    await writer.WriteLineAsync(global.ToString());
                     foreach (ISection globalSection in global.Sections) {
                         if (globalSection is TextBlock globalTextBlock) {
                             foreach (Line line in globalTextBlock.Lines) {
-                                Console.WriteLine(line.ToString());
+                                await writer.WriteLineAsync(line.ToString());
                             }
                         } else if (globalSection is ProjConfigGlobalSection configSection) {
-                            Console.WriteLine(configSection.ToString());
+                            await writer.WriteLineAsync(configSection.ToString());
                             foreach (Project project in m_SortedProjects) {
-                                if (configSection.ProjectMap.TryGetValue(project.Element, out IReadOnlyList<ProjConfig> configLines)) {
+                                if (configSection.ProjectMap.TryGetValue(project.Element,
+                                    out IReadOnlyList<ProjConfig> configLines)) {
                                     // If it doesn't exist in the config, it's not a project that is configurable.
                                     foreach (var line in configLines) {
-                                        Console.WriteLine(line);
+                                        await writer.WriteLineAsync(line.ToString());
                                     }
                                 }
                             }
+
+                            // Write all lines that aren't for the configuration at the end. This contains the
+                            // `EndGlobalSection`.
+                            foreach (var x in configSection.Lines.Where(l => l is not ProjConfig)) {
+                                await writer.WriteLineAsync(x.ToString());
+                            }
                         } else if (globalSection is NestedProjGlobalSection nestedSection) {
-                            Console.WriteLine(nestedSection.ToString());
+                            await writer.WriteLineAsync(nestedSection.ToString());
                             foreach (Project project in m_SortedProjects) {
                                 if (nestedSection.ProjectMap.TryGetValue(project.Element, out NestedProj nestedProj)) {
                                     // If it doesn't exist in the nested projects, it's a root element (has no parent)
-                                    Console.WriteLine(nestedProj.ToString());
+                                    await writer.WriteLineAsync(nestedProj.ToString());
                                 }
                             }
+
+                            // Write all lines that aren't for the configuration at the end. This contains the
+                            // `EndGlobalSection`.
+                            foreach (var x in nestedSection.Lines.Where(l => l is not NestedProj)) {
+                                await writer.WriteLineAsync(x.ToString());
+                            }
                         } else if (globalSection is GlobalSection genericSection) {
-                            Console.WriteLine(genericSection.ToString());
+                            await writer.WriteLineAsync(genericSection.ToString());
                             foreach (Line line in genericSection.Lines) {
-                                Console.WriteLine(line.ToString());
+                                await writer.WriteLineAsync(line.ToString());
                             }
                         }
                     }

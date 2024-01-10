@@ -7,15 +7,19 @@ namespace RJCP.VsSolutionSort
     {
         internal async static Task<int> Main(string[] args)
         {
-            var solution = new SortedSolution();
-            try {
-                await solution.LoadAsync(args[0]);
-            } catch (SolutionFormatException ex) {
-                Console.WriteLine($"Failed - {ex.Message}");
+            if (args.Length != 1) {
+                Console.WriteLine("VsSolutionSort <filename.sln>");
                 return 1;
             }
 
-            solution.WriteAsync(null);
+            var solution = new SortedSolution();
+            try {
+                await solution.LoadAsync(args[0]);
+                await solution.WriteAsync(args[0]);
+            } catch (SolutionFormatException ex) {
+                Console.WriteLine($"Failed Parsing - {ex.Message}");
+                return 1;
+            }
 
             return 0;
         }
