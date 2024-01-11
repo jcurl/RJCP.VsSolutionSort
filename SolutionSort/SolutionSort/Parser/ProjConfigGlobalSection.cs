@@ -22,7 +22,7 @@
         internal void Add(ProjConfig config)
         {
             if (m_KeyConfigs.TryGetValue(config.Element, out IReadOnlyList<ProjConfig> lines)) {
-                if (lines == null) {
+                if (lines is null) {
                     // This shouldn't happen, unless the element was somehow added without new initialisation, which the
                     // 'else' statement does.
                     lines = new List<ProjConfig>();

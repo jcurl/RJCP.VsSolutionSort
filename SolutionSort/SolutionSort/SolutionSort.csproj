@@ -17,7 +17,6 @@
     <Authors>Jason Curl</Authors>
     <Copyright>(C) 2024, Jason Curl</Copyright>
     <Company></Company>
-
     <Description>Sort Visual Studio Solution File contents.</Description>
     <Version>0.1.0</Version>
 
@@ -40,6 +39,10 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="CSharpIsNullAnalyzer" Version="0.1.495" PrivateAssets="all" />
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="Parser\EndGlobalParse.cs" />

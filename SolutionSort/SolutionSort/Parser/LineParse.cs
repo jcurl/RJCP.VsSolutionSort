@@ -8,7 +8,7 @@
         /// <inheritdoc/>
         public Line Parse(string line)
         {
-            if (line == null) return null;
+            if (line is null) return null;
             return new Line(line);
         }
 

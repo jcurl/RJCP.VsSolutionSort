@@ -91,7 +91,7 @@
             m_Sections.Clear();
             while (true) {
                 string line = await reader.ReadLineAsync();
-                if (line == null) return;
+                if (line is null) return;
 
                 if (IsLineType(LineType.Project, line, out Project project)) {
                     await ParseProject(reader, project);
@@ -122,7 +122,7 @@
                 return false;
 
             token = (T)parser.Parse(line);
-            return token != null;
+            return token is not null;
         }
 
         /// <summary>
@@ -143,7 +143,7 @@
         {
             while (true) {
                 string line = await reader.ReadLineAsync();
-                if (line == null) return;
+                if (line is null) return;
 
                 if (IsLineType(LineType.EndProject, line, out Line endProject)) {
                     project.AddLine(endProject);

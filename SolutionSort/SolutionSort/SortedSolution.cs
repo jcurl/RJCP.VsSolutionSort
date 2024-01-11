@@ -84,7 +84,7 @@
 
             foreach (ISection section in solution.Sections) {
                 if (section is Projects projects) {
-                    if (found != null)
+                    if (found is not null)
                         throw new SolutionFormatException("Multiple Project sections found");
                     found = projects;
                 }
@@ -100,7 +100,7 @@
                 if (section is Global global) {
                     foreach (ISection globalSection in global.Sections) {
                         if (globalSection.GetType() == typeof(T)) {
-                            if (found != null)
+                            if (found is not null)
                                 throw new SolutionFormatException("Multiple GlobalSections found of the same type");
                             found = (T)globalSection;
                         }
@@ -117,9 +117,9 @@
 
             public int Compare(Project x, Project y)
             {
-                if (x == null && y == null) return 0;
-                if (x == null) return -1;
-                if (y == null) return 1;
+                if (x is null && y is null) return 0;
+                if (x is null) return -1;
+                if (y is null) return 1;
 
                 if (x.ProjectType == Folder && y.ProjectType != Folder) return -1;
                 if (x.ProjectType != Folder && y.ProjectType == Folder) return 1;
@@ -138,7 +138,7 @@
                 sorted.Add(root);
 
                 // If the 'nestedProjectSection' is empty, we sort based on the projects only.
-                if (nested != null)
+                if (nested is not null)
                     AddSortedChildren(root, projects, nested, sorted);
             }
             return sorted;
@@ -146,7 +146,7 @@
 
         private IEnumerable<Project> GetRootElements(Projects projects, NestedProjGlobalSection nested)
         {
-            if (nested == null) return projects.ProjectList.OrderBy(i => i.Key);
+            if (nested is null) return projects.ProjectList.OrderBy(i => i.Key);
 
             var nestedGuids =
                 from item in nested.Lines

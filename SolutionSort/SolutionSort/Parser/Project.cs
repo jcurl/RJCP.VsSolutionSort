@@ -52,7 +52,7 @@
 
         internal void AddLine(Line line)
         {
-            if (line != null) m_Lines.Add(line);
+            if (line is not null) m_Lines.Add(line);
         }
 
         /// <summary>
