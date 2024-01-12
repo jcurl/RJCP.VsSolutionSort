@@ -9,7 +9,7 @@
     internal class ProjectParse : IParseLine<Project>
     {
         private readonly Regex Regex =
-            new(@"^\s*Project\(""\{(\S+)\}""\)\s*=\s*""(\S+)""\s*,\s*""(\S+)""\s*,\s*""\{(\S+)\}""\s*$",
+            new(@"^\s*Project\(""\{(\S+)\}""\)\s*=\s*""(.+)""\s*,\s*""(.+)""\s*,\s*""\{(\S+)\}""\s*$",
                 RegexOptions.CultureInvariant | RegexOptions.Compiled);
 
         /// <inheritdoc/>

@@ -4,13 +4,14 @@
     using System.Collections.Generic;
     using System.IO;
     using System.Linq;
+    using System.Text;
     using System.Threading.Tasks;
     using Parser;
 
     /// <summary>
     /// A decomposed Solution File, with the task of sorting the projects by name.
     /// </summary>
-    internal class SortedSolution
+    public class SortedSolution
     {
         private readonly Solution m_Solution = new();
         private List<Project> m_SortedProjects;
@@ -202,7 +203,9 @@
             if (m_Solution.Sections.Count == 0)
                 throw new InvalidOperationException("Solution not loaded");
 
-            using var writer = new StreamWriter(file);
+            // Emit a Byte Order Mark.
+            Encoding encoding = new UTF8Encoding(true);
+            using var writer = new StreamWriter(file, encoding);
             await WriteAsync(writer);
         }
 
