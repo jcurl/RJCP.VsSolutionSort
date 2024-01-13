@@ -18,7 +18,7 @@
     <Copyright>(C) 2024, Jason Curl</Copyright>
     <Company></Company>
     <Description>Sort Visual Studio Solution File contents.</Description>
-    <Version>0.1.0</Version>
+    <Version>1.0.0-beta</Version>
 
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 
@@ -28,6 +28,8 @@
 
     <EnableDefaultItems>false</EnableDefaultItems>
     <GenerateDocumentationFile>false</GenerateDocumentationFile>
+    <RevisionControl>git</RevisionControl>
+    <RevisionControlLabel>release/v$(Version)</RevisionControlLabel>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug'">
@@ -38,13 +40,23 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release'">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
+    <RevisionControlStrict>true</RevisionControlStrict>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="RJCP.Core.CommandLine" Version="0.8.2" />
+    <PackageReference Include="RJCP.MSBuildTasks" Version="0.2.4">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
     <PackageReference Include="CSharpIsNullAnalyzer" Version="0.1.495" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="CmdLine\Format.cs" />
+    <Compile Include="CmdLine\Help.cs" />
+    <Compile Include="CmdLine\SolutionOptions.cs" />
+    <Compile Include="CmdLine\Terminal.cs" />
+    <Compile Include="CmdLine\Version.cs" />
     <Compile Include="Parser\EndGlobalParse.cs" />
     <Compile Include="Parser\EndGlobalSectionParse.cs" />
     <Compile Include="Parser\Global.cs" />
@@ -70,9 +82,21 @@
     <Compile Include="Parser\Solution.cs" />
     <Compile Include="Parser\TextBlock.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="Resources\HelpResource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HelpResource.resx</DependentUpon>
+    </Compile>
     <Compile Include="SolutionFormatException.cs" />
     <Compile Include="SolutionProjectTypes.cs" />
     <Compile Include="SortedSolution.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Resources\HelpResource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>HelpResource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>
