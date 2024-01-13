@@ -130,6 +130,9 @@
     <None Include="TestResources\Solutions\OnlyProjectsSorted.sln">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+    <None Include="TestResources\Solutions\Error_ParentIsProject.sln">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TestResources\Solutions\ProjectFolderWithSpace.sln">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

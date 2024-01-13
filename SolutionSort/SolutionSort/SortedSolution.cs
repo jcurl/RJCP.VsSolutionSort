@@ -178,6 +178,12 @@
         private void AddSortedChildren(Project project, Projects projects, NestedProjGlobalSection nested, List<Project> sorted)
         {
             var children = GetChildren(project, projects, nested);
+            if (project.ProjectType != SolutionProjectTypes.Folder && children.Any()) {
+                // We have elements that have their parent pointing to a project. Visual Studio will remove these
+                // elements from the project tree.
+                throw new SolutionFormatException($"Error sorting projects. Nested Global Section has projects referring to non-folder {project.Element} {project.Key}");
+            }
+
             foreach (var child in children) {
                 sorted.Add(child);
                 AddSortedChildren(child, projects, nested, sorted);

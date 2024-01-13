@@ -217,5 +217,14 @@ namespace RJCP.VsSolutionSort
             // There are two `Project`..`EndProject` and they have the same value (path).
             TestErrorInSolution("Error_DuplicateProjectPath.sln");
         }
+
+        [Test]
+        public void ErrorParentIsProjectNotFolder()
+        {
+            // A (reachable) project has a parent not pointing to a folder. The offending entry is:
+            //  {2EF7D41D-4AB5-458A-BB1E-838BEBD04ABB} = {CB82919E-CBC9-4929-A669-CF855BE738F0}
+
+            TestErrorInSolution("Error_ParentIsProject.sln");
+        }
     }
 }
