@@ -3,6 +3,7 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using System.Linq;
     using System.Threading.Tasks;
 
     /// <summary>
@@ -11,6 +12,9 @@
     internal class Solution
     {
         private readonly List<ISection> m_Sections = new();
+        private bool m_HasGlobal;
+        private bool m_HasGlobalSectionNested;
+        private bool m_HasGlobalSectionProjConfig;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="Solution"/> class.
@@ -91,17 +95,63 @@
             m_Sections.Clear();
             while (true) {
                 string line = await reader.ReadLineAsync();
-                if (line is null) return;
+                if (line is null) {
+                    CheckForDuplicateProjectValues(m_Sections);
+                    return;
+                }
 
                 if (IsLineType(LineType.Project, line, out Project project)) {
                     await ParseProject(reader, project);
                 } else if (IsLineType(LineType.Global, line, out Global global)) {
+                    if (m_HasGlobal)
+                        throw new SolutionFormatException("Only one Global section is allowed.");
+                    m_HasGlobal = true;
+
                     await ParseGlobal(reader, global);
                 } else if (IsLineType(LineType.Line, line, out Line text)) {
                     TextBlock block = m_Sections.GetSection<TextBlock>();
                     block.Lines.Add(text);
                 }
             }
+        }
+
+        private static void CheckForDuplicateProjectValues(List<ISection> sections)
+        {
+            // This isn't an error in the Solution File, but Visual Studio won't open the file none-the-less.
+            HashSet<string> path = new();
+
+            var projects = GetProjects(sections);
+            if (projects is null) return;
+
+            foreach (Project project in projects) {
+                if (path.Contains(project.Value))
+                    throw new SolutionFormatException("Multiple projects of the same solution path found");
+                path.Add(project.Value);
+            }
+        }
+
+        private static IEnumerable<Project> GetProjects(List<ISection> sections)
+        {
+            Projects projects = null;
+
+            var projectsList =
+                from section in sections
+                where section is Projects
+                select (Projects)section;
+            switch (projectsList.Count()) {
+            case 0: return null;
+            case 1:
+                projects = projectsList.First();
+                break;
+            default:
+                throw new SolutionFormatException("Multiple Project sections found");
+            }
+
+            // Ignore folders.
+            return
+                from project in projects.ProjectList
+                where project.ProjectType != SolutionProjectTypes.Folder
+                select project;
         }
 
         /// <summary>
@@ -195,10 +245,18 @@
         {
             switch (section.Section) {
             case "ProjectConfigurationPlatforms":
+                if (m_HasGlobalSectionProjConfig)
+                    throw new SolutionFormatException("Only one GlobalSection(ProjectConfigurationPlatforms) is allowed.");
+                m_HasGlobalSectionProjConfig = true;
+
                 await ParseProjConfigGlobalSection(reader, global,
                     new ProjConfigGlobalSection(section.ToString(), section.Section, section.Solution));
                 return;
             case "NestedProjects":
+                if (m_HasGlobalSectionNested)
+                    throw new SolutionFormatException("Only one GlobalSection(NestedProjects) is allowed.");
+                m_HasGlobalSectionNested = true;
+
                 await ParseNestedProjGlobalSection(reader, global,
                     new NestedProjGlobalSection(section.ToString(), section.Section, section.Solution));
                 return;

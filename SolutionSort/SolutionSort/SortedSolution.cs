@@ -114,16 +114,14 @@
         #region Sorting
         private sealed class ProjectComparer : IComparer<Project>
         {
-            private static readonly Guid Folder = new("2150E333-8FDC-42A3-9474-1A3956D46DE8");
-
             public int Compare(Project x, Project y)
             {
                 if (x is null && y is null) return 0;
                 if (x is null) return -1;
                 if (y is null) return 1;
 
-                if (x.ProjectType == Folder && y.ProjectType != Folder) return -1;
-                if (x.ProjectType != Folder && y.ProjectType == Folder) return 1;
+                if (x.ProjectType == SolutionProjectTypes.Folder && y.ProjectType != SolutionProjectTypes.Folder) return -1;
+                if (x.ProjectType != SolutionProjectTypes.Folder && y.ProjectType == SolutionProjectTypes.Folder) return 1;
                 return string.Compare(x.Key, y.Key, StringComparison.InvariantCultureIgnoreCase);
             }
         }
@@ -141,6 +139,18 @@
                 // If the 'nestedProjectSection' is empty, we sort based on the projects only.
                 if (nested is not null)
                     AddSortedChildren(root, projects, nested, sorted);
+            }
+
+            if (sorted.Count == 0 && projects.ProjectList.Count != 0) {
+                throw new SolutionFormatException("Error sorting projects. Nested Global Section is broken (no root projects entries found).");
+            }
+
+            if (sorted.Count != projects.ProjectList.Count) {
+                // If we have a cyclic graph in the nested structure (project = parent), then a project entry points to
+                // a key that eventually points back to itself and never the parent. As we enumerate from only those
+                // items reachable from the parent, we'll never get into the cycle, but just find we've found less
+                // projects than what is defined.
+                throw new SolutionFormatException("Error sorting projects. Nested Global Section is broken (probably cycles in structure).");
             }
             return sorted;
         }

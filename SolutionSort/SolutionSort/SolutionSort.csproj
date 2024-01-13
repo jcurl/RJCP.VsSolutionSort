@@ -71,6 +71,7 @@
     <Compile Include="Parser\TextBlock.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="SolutionFormatException.cs" />
+    <Compile Include="SolutionProjectTypes.cs" />
     <Compile Include="SortedSolution.cs" />
   </ItemGroup>
 
