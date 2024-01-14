@@ -38,7 +38,7 @@ namespace RJCP.VsSolutionSort
                     return 1;
                 }
 
-                return await FileSystem.SolutionScan.ProcessDirAsync(dir, options.DryRun);
+                return await FileSystem.SolutionScan.ProcessDirAsync(dir, options.Jobs, options.DryRun);
             } else {
                 if (options.Arguments.Count != 1) {
                     CmdLine.Terminal.WriteLine("ERROR: Exactly one solution file should be provided on the command line.");

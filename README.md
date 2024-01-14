@@ -12,6 +12,7 @@ This project is about sorting the contents of a Visual Studio Solution File
     - [2.3.1. Sorting a Single Solution](#231-sorting-a-single-solution)
     - [2.3.2. Sorting Multiple Solutions](#232-sorting-multiple-solutions)
       - [2.3.2.1. Controlling the Recursive Behaviour (.solutionsort file)](#2321-controlling-the-recursive-behaviour-solutionsort-file)
+      - [2.3.2.2. Setting Concurrency](#2322-setting-concurrency)
     - [2.3.3. Testing Solution Sort](#233-testing-solution-sort)
 - [3. Sorting Algorithm](#3-sorting-algorithm)
 - [4. The Solution File Information](#4-the-solution-file-information)
@@ -41,17 +42,16 @@ VsSolutionSort Version: 1.0.0-beta.20240113T185144+g1dd2665; (C) 2024, Jason Cur
 If you need a quick reference to using the program, run on the command line:
 
 ```text
-VsSolutionSort sorts the project entries in a Visual Studio solution file
-in the order as Visual Studio shows them in the Solution Explorer.
-Sorting the project entries in the solution file on changes helps users
-compare similar solution files, such as those often in revision control
-systems.
+VsSolutionSort sorts the project entries in a Visual Studio solution file in
+the order as Visual Studio shows them in the Solution Explorer. Sorting the
+project entries in the solution file on changes helps users compare similar
+solution files, such as those often in revision control systems.
 
 Usage:
 
   VsSolutionSort.exe -?|-v
   VsSolutionSort.exe [-d] <input.sln>
-  VsSolutionSort.exe [-d] -R [<dir>]
+  VsSolutionSort.exe [-d] [-j<N>] -R [<dir>]
 
 Options:
 
@@ -63,14 +63,17 @@ Options:
     Print out the name of the file that would be processed instead of
     processing the file.
   -R | --recurse
-    Search recursively from the directory given for solution files,
-    *.sln, and sort them.
+    Search recursively from the directory given for solution files, *.sln, and
+    sort them.
+  -j | --jobs <int>
+    Specify the number of threads <int> that should be used when recursing.
+    Default is to use the number of threads in the CPU.
 
 Inputs:
 
   <input.sln> - a Visual Studio solution file.
-  <dir> - the directory to search from. If this is not provided when
-    recursing, the current directory is assumed.
+  <dir> - the directory to search from. If this is not provided when recursing,
+    the current directory is assumed.
 
 Exit Codes:
 
@@ -147,6 +150,29 @@ section.
 The ordering of the regular expressions does not matter. If there are multiple
 `[include]` or `[exclude]` sections then they are grouped as if there were only
 one of each section.
+
+##### 2.3.2.2. Setting Concurrency
+
+On systems with very high number of CPUs, you might want to limit the
+concurrency (after testing your total time). To do this, use the option `-j`
+(`--jobs`) with a value indicating the number of concurrent operations the
+software should use.
+
+A table shows an example of how concurrency affects the speed of the overall
+operation, when parsing on an i7-6700U with 8 hardware threads. The test was for
+parsing the files (it was run in `--dryrun` so files weren't written).
+
+| jobs | Scanning (ms) | Parsing (ms) |
+| ---- | ------------- | ------------ |
+| 1    | 562           | 770          |
+| 2    | 340           | 453          |
+| 3    | 240           | 343          |
+| 4    | 187           | 282          |
+| 5    | 156           | 266          |
+| 6    | 141           | 240          |
+| 7    | 135           | 255          |
+| 8    | 125           | 234          |
+| 255  | 125           | 235          |
 
 #### 2.3.3. Testing Solution Sort
 

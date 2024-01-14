@@ -126,7 +126,7 @@
   <data name="Help210_UsageInfo" xml:space="preserve">
     <value>VsSolutionSort.exe -?|-v
 VsSolutionSort.exe [-d] &lt;input.sln&gt;
-VsSolutionSort.exe [-d] -R [&lt;dir&gt;]</value>
+VsSolutionSort.exe [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;]</value>
   </data>
   <data name="Help300_Options" xml:space="preserve">
     <value>Options:</value>
@@ -146,6 +146,10 @@ VsSolutionSort.exe [-d] -R [&lt;dir&gt;]</value>
   <data name="Help320_Recurse" xml:space="preserve">
     <value>{0}R | {1}recurse
  Search recursively from the directory given for solution files, *.sln, and sort them.</value>
+  </data>
+  <data name="Help325_Jobs" xml:space="preserve">
+    <value>{0}j | {1}jobs &lt;int&gt;
+ Specify the number of threads &lt;int&gt; that should be used when recursing. Default is to use the number of threads in the CPU.</value>
   </data>
   <data name="Help400_Input" xml:space="preserve">
     <value>Inputs:</value>

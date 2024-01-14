@@ -81,7 +81,7 @@ namespace RJCP.VsSolutionSort.Resources {
         /// <summary>
         ///   Looks up a localized string similar to VsSolutionSort.exe -?|-v
         ///VsSolutionSort.exe [-d] &lt;input.sln&gt;
-        ///VsSolutionSort.exe [-d] -R [&lt;dir&gt;].
+        ///VsSolutionSort.exe [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;].
         /// </summary>
         internal static string Help210_UsageInfo {
             get {
@@ -135,6 +135,16 @@ namespace RJCP.VsSolutionSort.Resources {
         internal static string Help320_Recurse {
             get {
                 return ResourceManager.GetString("Help320_Recurse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}j | {1}jobs &lt;int&gt;
+        /// Specify the number of threads &lt;int&gt; that should be used when recursing. Default is to use the number of threads in the CPU..
+        /// </summary>
+        internal static string Help325_Jobs {
+            get {
+                return ResourceManager.GetString("Help325_Jobs", resourceCulture);
             }
         }
         

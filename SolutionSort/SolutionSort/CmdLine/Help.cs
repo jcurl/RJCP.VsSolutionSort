@@ -23,6 +23,7 @@
             Write(2, 4, HelpResource.Help311_VersionOption);
             Write(2, 4, HelpResource.Help315_DryRun);
             Write(2, 4, HelpResource.Help320_Recurse);
+            Write(2, 4, HelpResource.Help325_Jobs);
             Write();
             Write(HelpResource.Help400_Input);
             Write();
