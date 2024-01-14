@@ -32,16 +32,17 @@
         public async static Task<int> ProcessDirAsync(string directory, bool dryRun)
         {
             ConcurrentQueue<string> files = new();
-            using DotSolution defaultDotSolution = new();
-            if (!await GetPathsAsync(directory, defaultDotSolution, files)) {
-                CmdLine.Terminal.WriteLine("Couldn't parse files");
+            try {
+                using DotSolution defaultDotSolution = new();
+                await GetPathsAsync(directory, defaultDotSolution, files);
+            } catch (Exception ex) {
+                CmdLine.Terminal.WriteLine($"ERROR: Problem enumerating directory for files - {ex.Message}");
                 return 255;
             }
 
             // Process the files in parallel.
             int result = 0;
-            ParallelOptions options = new() { MaxDegreeOfParallelism = 4 };
-            await Parallel.ForEachAsync(files, options, async (file, token) => {
+            await Parallel.ForEachAsync(files, async (file, token) => {
                 int processResult = await ProcessFileAsync(file, dryRun);
 
                 // Atomically update the result to be the highest value.
@@ -55,7 +56,7 @@
             return result;
         }
 
-        private static async Task<bool> GetPathsAsync(string directory, DotSolution solutionRule, ConcurrentQueue<string> paths)
+        private static async Task GetPathsAsync(string directory, DotSolution solutionRule, ConcurrentQueue<string> paths)
         {
             bool ownsDotSolution = false;
             string solutionRuleFile = Path.Combine(directory, ".solutionsort");
@@ -64,22 +65,20 @@
                 ownsDotSolution = true;
             }
 
-            IEnumerable<string> files = Directory.GetFiles(directory, "*.sln");
-            foreach (string file in files) {
-                bool process = await solutionRule.ShouldProcessSolutionAsync(file);
-                if (process) paths.Enqueue(file);
-            }
-
-            IEnumerable<string> dirs = Directory.GetDirectories(directory);
-            bool result = true;
-            foreach (string dir in dirs) {
-                if (!await GetPathsAsync(dir, solutionRule, paths)) {
-                    result = false;
+            try {
+                IEnumerable<string> files = Directory.GetFiles(directory, "*.sln");
+                foreach (string file in files) {
+                    bool process = await solutionRule.ShouldProcessSolutionAsync(file);
+                    if (process) paths.Enqueue(file);
                 }
-            }
 
-            if (ownsDotSolution) solutionRule.Dispose();
-            return result;
+                IEnumerable<string> dirs = Directory.GetDirectories(directory);
+                await Parallel.ForEachAsync(dirs, async (dir, token) => {
+                    await GetPathsAsync(dir, solutionRule, paths);
+                });
+            } finally {
+                if (ownsDotSolution) solutionRule.Dispose();
+            }
         }
     }
 }
