@@ -12,10 +12,9 @@
     /// <summary>
     /// Reads and parses a file `.solutionsort`.
     /// </summary>
-    internal class DotSolution
+    internal sealed class DotSolution : IDisposable
     {
         private readonly string m_FileName;
-        private readonly object ReadLock = new();
         private readonly List<Regex> m_Include = new();
         private readonly List<Regex> m_Exclude = new();
 
@@ -105,71 +104,82 @@
 
         private int GetInitialized() { return Thread.VolatileRead(ref m_Initialized); }
 
-        private Task<bool> ReadDotFileAsync()
+        private readonly SemaphoreSlim m_FileSemaphore = new(1);
+
+        private async Task<bool> ReadDotFileAsync()
         {
-            // Must run as a task, as we can't await in a lock. The run could be removed and replaced with the usage of
-            // waiting on a result if a previous run is ongoing.
-            return Task.Run(() => {
-                lock (ReadLock) {
-                    switch (GetInitialized()) {
-                    case Initialized: return true;
-                    case InitializedError: return false;
-                    }
+            switch (GetInitialized()) {
+            case Initialized: return true;
+            case InitializedError: return false;
+            }
 
-                    try {
-                        bool inclusion = true;
-                        using FileStream fs = new(m_FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        using StreamReader reader = new(fs, Encoding.UTF8);
-                        while (true) {
-                            string line = reader.ReadLine();
-                            if (line is null) break;
-                            line = line.Trim();
+            await m_FileSemaphore.WaitAsync();
+            try {
+                bool inclusion = true;
+                using FileStream fs = new(m_FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
+                using StreamReader reader = new(fs, Encoding.UTF8);
+                while (true) {
+                    string line = reader.ReadLine();
+                    if (line is null) break;
+                    line = line.Trim();
 
-                            // Comments must start with a hash in column 0.
-                            if (line.Length > 0 && line[0] == '#') continue;
+                    // Comments must start with a hash in column 0.
+                    if (line.Length > 0 && line[0] == '#') continue;
 
-                            if (line.Equals("[include]", StringComparison.InvariantCultureIgnoreCase)) {
-                                inclusion = true;
-                            } else if (line.Equals("[exclude]", StringComparison.InvariantCultureIgnoreCase)) {
-                                inclusion = false;
-                            } else {
-                                Regex r = new(line,
-                                    RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline |
-                                    RegexOptions.IgnoreCase);
-                                if (inclusion) {
-                                    m_Include.Add(r);
-                                } else {
-                                    m_Exclude.Add(r);
-                                }
-                            }
+                    if (line.Equals("[include]", StringComparison.InvariantCultureIgnoreCase)) {
+                        inclusion = true;
+                    } else if (line.Equals("[exclude]", StringComparison.InvariantCultureIgnoreCase)) {
+                        inclusion = false;
+                    } else {
+                        Regex r = new(line,
+                            RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.Singleline |
+                            RegexOptions.IgnoreCase);
+                        if (inclusion) {
+                            m_Include.Add(r);
+                        } else {
+                            m_Exclude.Add(r);
                         }
-                    } catch (ArgumentException) {
-                        // Regex compilation error.
-                        Thread.VolatileWrite(ref m_Initialized, InitializedError);
-                        return false;
-                    } catch (IOException) {
-                        // IOException, FielNotFoundException, DirectoryNotFoundException, PathTooLongException
-                        Thread.VolatileWrite(ref m_Initialized, InitializedError);
-                        return false;
-                    } catch (SecurityException) {
-                        // FileStream exception
-                        Thread.VolatileWrite(ref m_Initialized, InitializedError);
-                        return false;
-                    } catch (UnauthorizedAccessException) {
-                        Thread.VolatileWrite(ref m_Initialized, InitializedError);
-                        return false;
-                    } catch (NotSupportedException) {
-                        Thread.VolatileWrite(ref m_Initialized, InitializedError);
-                        return false;
-                    } catch (Exception) {
-                        Thread.VolatileWrite(ref m_Initialized, InitializedError);
-                        return false;
                     }
-
-                    Thread.VolatileWrite(ref m_Initialized, Initialized);
-                    return true;
                 }
-            });
+            } catch (ArgumentException) {
+                // Regex compilation error.
+                Thread.VolatileWrite(ref m_Initialized, InitializedError);
+                return false;
+            } catch (IOException) {
+                // IOException, FielNotFoundException, DirectoryNotFoundException, PathTooLongException
+                Thread.VolatileWrite(ref m_Initialized, InitializedError);
+                return false;
+            } catch (SecurityException) {
+                // FileStream exception
+                Thread.VolatileWrite(ref m_Initialized, InitializedError);
+                return false;
+            } catch (UnauthorizedAccessException) {
+                Thread.VolatileWrite(ref m_Initialized, InitializedError);
+                return false;
+            } catch (NotSupportedException) {
+                Thread.VolatileWrite(ref m_Initialized, InitializedError);
+                return false;
+            } catch (Exception) {
+                Thread.VolatileWrite(ref m_Initialized, InitializedError);
+                return false;
+            } finally {
+                Thread.VolatileWrite(ref m_Initialized, Initialized);
+                m_FileSemaphore.Release();
+            }
+            return true;
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        private void Dispose(bool disposing)
+        {
+            if (disposing) {
+                m_FileSemaphore.Dispose();
+            }
         }
     }
 }

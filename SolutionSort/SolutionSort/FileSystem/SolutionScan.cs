@@ -32,7 +32,8 @@
         public async static Task<int> ProcessDirAsync(string directory, bool dryRun)
         {
             ConcurrentQueue<string> files = new();
-            if (!await GetPathsAsync(directory, new DotSolution(), files)) {
+            using DotSolution defaultDotSolution = new();
+            if (!await GetPathsAsync(directory, defaultDotSolution, files)) {
                 CmdLine.Terminal.WriteLine("Couldn't parse files");
                 return 255;
             }
@@ -56,9 +57,11 @@
 
         private static async Task<bool> GetPathsAsync(string directory, DotSolution solutionRule, ConcurrentQueue<string> paths)
         {
+            bool ownsDotSolution = false;
             string solutionRuleFile = Path.Combine(directory, ".solutionsort");
             if (File.Exists(solutionRuleFile)) {
                 solutionRule = new DotSolution(solutionRuleFile);
+                ownsDotSolution = true;
             }
 
             IEnumerable<string> files = Directory.GetFiles(directory, "*.sln");
@@ -75,6 +78,7 @@
                 }
             }
 
+            if (ownsDotSolution) solutionRule.Dispose();
             return result;
         }
     }
