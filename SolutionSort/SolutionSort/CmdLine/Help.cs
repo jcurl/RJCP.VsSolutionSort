@@ -21,10 +21,13 @@
             Write();
             Write(2, 4, HelpResource.Help310_HelpOption);
             Write(2, 4, HelpResource.Help311_VersionOption);
+            Write(2, 4, HelpResource.Help315_DryRun);
+            Write(2, 4, HelpResource.Help320_Recurse);
             Write();
             Write(HelpResource.Help400_Input);
             Write();
             Write(2, 4, HelpResource.Help410_InputSolution);
+            Write(2, 4, HelpResource.Help415_InputDir);
             Write();
             Write(HelpResource.Help800_ExitCodes);
             Write();

@@ -12,6 +12,7 @@ namespace RJCP.VsSolutionSort
                 Options.Parse(options, args, OptionsStyle.Unix);
             } catch (OptionException ex) {
                 CmdLine.Terminal.WriteLine($"ERROR: {ex.Message}");
+                CmdLine.Terminal.WriteLine();
                 CmdLine.Help.PrintSimpleHelp();
                 return 1;
             }
@@ -26,23 +27,28 @@ namespace RJCP.VsSolutionSort
                 return 0;
             }
 
-            if (options.Arguments.Count != 1) {
-                CmdLine.Terminal.WriteLine("ERROR: No files given.");
-                CmdLine.Terminal.WriteLine();
-                CmdLine.Help.PrintSimpleHelp();
-                return 1;
-            }
+            if (options.Recurse) {
+                string dir = ".";
+                if (options.Arguments.Count == 1) {
+                    dir = options.Arguments[0];
+                } else if (options.Arguments.Count > 1) {
+                    CmdLine.Terminal.WriteLine("ERROR: A single directory should be given to start scanning *.sln files from.");
+                    CmdLine.Terminal.WriteLine();
+                    CmdLine.Help.PrintSimpleHelp();
+                    return 1;
+                }
 
-            var solution = new SortedSolution();
-            try {
-                await solution.LoadAsync(args[0]);
-                await solution.WriteAsync(args[0]);
-            } catch (SolutionFormatException ex) {
-                CmdLine.Terminal.WriteLine($"Failed Parsing - {ex.Message}");
-                return 1;
-            }
+                return await FileSystem.SolutionScan.ProcessDirAsync(dir, options.DryRun);
+            } else {
+                if (options.Arguments.Count != 1) {
+                    CmdLine.Terminal.WriteLine("ERROR: Exactly one solution file should be provided on the command line.");
+                    CmdLine.Terminal.WriteLine();
+                    CmdLine.Help.PrintSimpleHelp();
+                    return 1;
+                }
 
-            return 0;
+                return await FileSystem.SolutionScan.ProcessFileAsync(options.Arguments[0], options.DryRun);
+            }
         }
     }
 }

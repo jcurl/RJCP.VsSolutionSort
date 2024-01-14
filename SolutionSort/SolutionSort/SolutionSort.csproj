@@ -57,6 +57,8 @@
     <Compile Include="CmdLine\SolutionOptions.cs" />
     <Compile Include="CmdLine\Terminal.cs" />
     <Compile Include="CmdLine\Version.cs" />
+    <Compile Include="FileSystem\DotSolution.cs" />
+    <Compile Include="FileSystem\SolutionScan.cs" />
     <Compile Include="Parser\EndGlobalParse.cs" />
     <Compile Include="Parser\EndGlobalSectionParse.cs" />
     <Compile Include="Parser\Global.cs" />

@@ -1,0 +1,24 @@
+# The presence of this file, on its own without any rules indicates that no
+# solution file shall be processed in this folder or subfolders.
+#
+# If the file has no regular expressions, the default is to not process any
+# solutions.
+#
+# If you only want to process specific solutions:
+#
+# [include]
+# regex
+#
+# If you only want to not process specific solutions:
+#
+# [exclude]
+# regex
+#
+# If you want to process a bunch of solutions, except for a few, you'd define a
+# include section that filters what to check, and it's included unless it's in
+# the exclude block.
+# 
+# Comments *must* have a '#' at the beginning.
+#
+# This file has no regular expressions, therefore, it excludes by default all
+# files.

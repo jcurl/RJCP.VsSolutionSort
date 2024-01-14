@@ -124,24 +124,37 @@
     <value>Usage:</value>
   </data>
   <data name="Help210_UsageInfo" xml:space="preserve">
-    <value>VsSolutionSort.exe [options] &lt;input.sln&gt;</value>
+    <value>VsSolutionSort.exe -?|-v
+VsSolutionSort.exe [-d] &lt;input.sln&gt;
+VsSolutionSort.exe [-d] -R [&lt;dir&gt;]</value>
   </data>
   <data name="Help300_Options" xml:space="preserve">
     <value>Options:</value>
   </data>
   <data name="Help310_HelpOption" xml:space="preserve">
     <value>{0}? | {1}help
- displays this help message</value>
+ displays this help message.</value>
   </data>
   <data name="Help311_VersionOption" xml:space="preserve">
     <value>{0}v | {1}version
- displays the version of this program</value>
+ displays the version of this program.</value>
+  </data>
+  <data name="Help315_DryRun" xml:space="preserve">
+    <value>{0}d | {1}dryrun
+ Print out the name of the file that would be processed instead of processing the file.</value>
+  </data>
+  <data name="Help320_Recurse" xml:space="preserve">
+    <value>{0}R | {1}recurse
+ Search recursively from the directory given for solution files, *.sln, and sort them.</value>
   </data>
   <data name="Help400_Input" xml:space="preserve">
-    <value>Inputs Files:</value>
+    <value>Inputs:</value>
   </data>
   <data name="Help410_InputSolution" xml:space="preserve">
     <value>&lt;input.sln&gt; - a Visual Studio solution file.</value>
+  </data>
+  <data name="Help415_InputDir" xml:space="preserve">
+    <value>&lt;dir&gt; - the directory to search from. If this is not provided when recursing, the current directory is assumed.</value>
   </data>
   <data name="Help800_ExitCodes" xml:space="preserve">
     <value>Exit Codes:</value>
@@ -150,16 +163,16 @@
     <value>The following exit codes show the success of the operation.</value>
   </data>
   <data name="Help810_Success" xml:space="preserve">
-    <value>0 - The program ran successfully</value>
+    <value>0 - The program ran successfully.</value>
   </data>
   <data name="Help811_SolutionError" xml:space="preserve">
-    <value>1 - There was an error parsing the Visual Studio solution file</value>
+    <value>1 - There was an error parsing the Visual Studio solution file.</value>
   </data>
   <data name="Help899_UnknownError" xml:space="preserve">
-    <value>255 - There was an unknown error</value>
+    <value>255 - There was an unknown error.</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>VsSolutionSort Version: {0}</value>
+    <value>VsSolutionSort Version: {0}.</value>
   </data>
   <data name="VersionCopyright" xml:space="preserve">
     <value>VsSolutionSort Version: {0}; {1}.</value>

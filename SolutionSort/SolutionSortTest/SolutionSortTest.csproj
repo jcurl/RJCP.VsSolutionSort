@@ -55,6 +55,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Include="TestResources\Solutions\.solutionsort">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="TestResources\Solutions\EmptyGlobal.sln">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

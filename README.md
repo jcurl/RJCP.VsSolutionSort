@@ -9,6 +9,10 @@ This project is about sorting the contents of a Visual Studio Solution File
   - [2.1. Getting the Version](#21-getting-the-version)
   - [2.2. Getting Command Line Help](#22-getting-command-line-help)
   - [2.3. Sorting a Solution File](#23-sorting-a-solution-file)
+    - [2.3.1. Sorting a Single Solution](#231-sorting-a-single-solution)
+    - [2.3.2. Sorting Multiple Solutions](#232-sorting-multiple-solutions)
+      - [2.3.2.1. Controlling the Recursive Behaviour (.solutionsort file)](#2321-controlling-the-recursive-behaviour-solutionsort-file)
+    - [2.3.3. Testing Solution Sort](#233-testing-solution-sort)
 - [3. Sorting Algorithm](#3-sorting-algorithm)
 - [4. The Solution File Information](#4-the-solution-file-information)
   - [4.1. Nested Section Information](#41-nested-section-information)
@@ -37,36 +41,49 @@ VsSolutionSort Version: 1.0.0-beta.20240113T185144+g1dd2665; (C) 2024, Jason Cur
 If you need a quick reference to using the program, run on the command line:
 
 ```text
-$ VsSolutionSort.exe --help
-VsSolutionSort sorts the project entries in a Visual Studio solution file in the order as Visual Studio
-shows them in the Solution Explorer. Sorting the project entries in the solution file on changes helps users
-compare similar solution files, such as those often in revision control systems.
+VsSolutionSort sorts the project entries in a Visual Studio solution file
+in the order as Visual Studio shows them in the Solution Explorer.
+Sorting the project entries in the solution file on changes helps users
+compare similar solution files, such as those often in revision control
+systems.
 
 Usage:
 
-  VsSolutionSort.exe [options] <input.sln>
+  VsSolutionSort.exe -?|-v
+  VsSolutionSort.exe [-d] <input.sln>
+  VsSolutionSort.exe [-d] -R [<dir>]
 
 Options:
 
   -? | --help
-    displays this help message
+    displays this help message.
   -v | --version
-    displays the version of this program
+    displays the version of this program.
+  -d | --dryrun
+    Print out the name of the file that would be processed instead of
+    processing the file.
+  -R | --recurse
+    Search recursively from the directory given for solution files,
+    *.sln, and sort them.
 
-Inputs Files:
+Inputs:
 
   <input.sln> - a Visual Studio solution file.
+  <dir> - the directory to search from. If this is not provided when
+    recursing, the current directory is assumed.
 
 Exit Codes:
 
   The following exit codes show the success of the operation.
 
-  0 - The program ran successfully
-  1 - There was an error parsing the Visual Studio solution file
-  255 - There was an unknown error
+  0 - The program ran successfully.
+  1 - There was an error parsing the Visual Studio solution file.
+  255 - There was an unknown error.
 ```
 
 ### 2.3. Sorting a Solution File
+
+#### 2.3.1. Sorting a Single Solution
 
 Execute the command from the terminal. Run the command once per solution file
 whose contents you want to sort.
@@ -78,6 +95,67 @@ VsSolutionSort.exe <SolutionSort.sln>
 On output it will *overwrite* the solution file. Ensure that there is a copy of
 the file prior to running (or use your revision control system to revert in case
 of fault).
+
+#### 2.3.2. Sorting Multiple Solutions
+
+If you have a larger project with multiple solution files, you can sort them all
+recursively.
+
+```cmd
+VsSolutionSort.exe -R
+```
+
+This will iterate from the current directory, find all solution files, and then
+sort them all in place. In case of errors, the tool will try to sort as many
+solutions as possible.
+
+##### 2.3.2.1. Controlling the Recursive Behaviour (.solutionsort file)
+
+Without any intervention, the tool will iterate all directories. In each
+directory it looks for the file with the name `.solutionsort`. If this file
+exists it is read for a set of inclusion and exclusion rules.
+
+If there are no rules, the initial assumption is that all solution files in this
+directory and subdirectories (unless there is a `.solutionsort` there) will not
+be parsed. Usually, you should not provide a `.solutionsort` unless you want to
+restrict parsing.
+
+The contents of the `.solutionsort` file is very simple
+
+```toml
+# COMMENT
+[include]
+REGEX
+
+[exclude]
+REGEX
+```
+
+The regular expressions are usual .NET regular expression strings (and not file
+globs). Only the file name is compared for the current folder. Directory names
+are not tested.
+
+If there are regular expressions under the `[include]` section, then the file
+name must match the regular expression. If a solution does not match an entry in
+the `[include]` section, it will not be parsed. If it does match, then it will
+be parsed, unless there is a matching entry in the `[exclude]` section.
+
+If there is no `[include]` section, but there is an `[exclude]` section, then it
+is assumed that all entries should match, except those in the `[exclude]`
+section.
+
+The ordering of the regular expressions does not matter. If there are multiple
+`[include]` or `[exclude]` sections then they are grouped as if there were only
+one of each section.
+
+#### 2.3.3. Testing Solution Sort
+
+If you do not wish to sort a solution, but only confirm that the solution files
+are able to be parsed, use the option `-d` (or `--dryrun`).
+
+This will print out the actions as it is loading the solution. This is very
+useful when testing the correctness of any `.solutionsort` file that might be
+present.
 
 ## 3. Sorting Algorithm
 

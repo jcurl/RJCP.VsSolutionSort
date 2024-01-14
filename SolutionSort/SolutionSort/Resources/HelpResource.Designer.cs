@@ -79,7 +79,9 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VsSolutionSort.exe [options] &lt;input.sln&gt;.
+        ///   Looks up a localized string similar to VsSolutionSort.exe -?|-v
+        ///VsSolutionSort.exe [-d] &lt;input.sln&gt;
+        ///VsSolutionSort.exe [-d] -R [&lt;dir&gt;].
         /// </summary>
         internal static string Help210_UsageInfo {
             get {
@@ -98,7 +100,7 @@ namespace RJCP.VsSolutionSort.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to {0}? | {1}help
-        /// displays this help message.
+        /// displays this help message..
         /// </summary>
         internal static string Help310_HelpOption {
             get {
@@ -108,7 +110,7 @@ namespace RJCP.VsSolutionSort.Resources {
         
         /// <summary>
         ///   Looks up a localized string similar to {0}v | {1}version
-        /// displays the version of this program.
+        /// displays the version of this program..
         /// </summary>
         internal static string Help311_VersionOption {
             get {
@@ -117,7 +119,27 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Inputs Files:.
+        ///   Looks up a localized string similar to {0}d | {1}dryrun
+        /// Print out the name of the file that would be processed instead of processing the file..
+        /// </summary>
+        internal static string Help315_DryRun {
+            get {
+                return ResourceManager.GetString("Help315_DryRun", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0}R | {1}recurse
+        /// Search recursively from the directory given for solution files, *.sln, and sort them..
+        /// </summary>
+        internal static string Help320_Recurse {
+            get {
+                return ResourceManager.GetString("Help320_Recurse", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Inputs:.
         /// </summary>
         internal static string Help400_Input {
             get {
@@ -131,6 +153,15 @@ namespace RJCP.VsSolutionSort.Resources {
         internal static string Help410_InputSolution {
             get {
                 return ResourceManager.GetString("Help410_InputSolution", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;dir&gt; - the directory to search from. If this is not provided when recursing, the current directory is assumed..
+        /// </summary>
+        internal static string Help415_InputDir {
+            get {
+                return ResourceManager.GetString("Help415_InputDir", resourceCulture);
             }
         }
         
@@ -153,7 +184,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 0 - The program ran successfully.
+        ///   Looks up a localized string similar to 0 - The program ran successfully..
         /// </summary>
         internal static string Help810_Success {
             get {
@@ -162,7 +193,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 1 - There was an error parsing the Visual Studio solution file.
+        ///   Looks up a localized string similar to 1 - There was an error parsing the Visual Studio solution file..
         /// </summary>
         internal static string Help811_SolutionError {
             get {
@@ -171,7 +202,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to 255 - There was an unknown error.
+        ///   Looks up a localized string similar to 255 - There was an unknown error..
         /// </summary>
         internal static string Help899_UnknownError {
             get {
@@ -180,7 +211,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VsSolutionSort Version: {0}.
+        ///   Looks up a localized string similar to VsSolutionSort Version: {0}..
         /// </summary>
         internal static string Version {
             get {
