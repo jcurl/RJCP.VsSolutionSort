@@ -1,6 +1,7 @@
 ﻿namespace RJCP.VsSolutionSort.CmdLine
 {
     using System;
+    using System.IO;
     using Resources;
 
     internal static class Help
@@ -8,6 +9,32 @@
         const string ShortOptionSymbol = "-";
         const string LongOptionSymbol = "--";
         const string AssignmentSymbol = "=";
+
+        private static readonly object ExeNameLock = new ();
+        private static string s_ExeName;
+
+        private static string ExeName
+        {
+            get
+            {
+                if (s_ExeName is null) {
+                    lock (ExeNameLock) {
+                        if (s_ExeName is null) {
+                            string exeName =
+                                Path.GetFileNameWithoutExtension(Environment.ProcessPath);
+                            if (exeName is null) {
+                                s_ExeName = "VsSolutionSort";
+                            } else if (exeName.StartsWith("dotnet-", StringComparison.InvariantCultureIgnoreCase)) {
+                                s_ExeName = $"dotnet {exeName[7..]}";
+                            } else {
+                                s_ExeName = exeName;
+                            }
+                        }
+                    }
+                }
+                return s_ExeName;
+            }
+        }
 
         public static void PrintHelp()
         {
@@ -65,7 +92,7 @@
 
         private static void Write(int indent, int hangingIndent, string line)
         {
-            Terminal.WriteLine(indent, hangingIndent, line, ShortOptionSymbol, LongOptionSymbol, AssignmentSymbol);
+            Terminal.WriteLine(indent, hangingIndent, line, ShortOptionSymbol, LongOptionSymbol, AssignmentSymbol, ExeName);
         }
     }
 }

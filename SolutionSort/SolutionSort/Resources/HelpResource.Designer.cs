@@ -61,7 +61,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VsSolutionSort sorts the project entries in a Visual Studio solution file in the order as Visual Studio shows them in the Solution Explorer. Sorting the project entries in the solution file on changes helps users compare similar solution files, such as those often in revision control systems..
+        ///   Looks up a localized string similar to {3} sorts the project entries in a Visual Studio solution file in the order as Visual Studio shows them in the Solution Explorer. Sorting the project entries in the solution file on changes helps users compare similar solution files, such as those often in revision control systems..
         /// </summary>
         internal static string Help100_Description {
             get {
@@ -79,9 +79,9 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VsSolutionSort.exe -?|-v
-        ///VsSolutionSort.exe [-d] &lt;input.sln&gt;
-        ///VsSolutionSort.exe [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;].
+        ///   Looks up a localized string similar to {3} -?|-v
+        ///{3} [-d] &lt;input.sln&gt;
+        ///{3} [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;].
         /// </summary>
         internal static string Help210_UsageInfo {
             get {
@@ -139,7 +139,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to {0}j | {1}jobs &lt;int&gt;
+        ///   Looks up a localized string similar to {0}j | {1}jobs{2}&lt;int&gt;
         /// Specify the number of threads &lt;int&gt; that should be used when recursing. Default is to use the number of threads in the CPU..
         /// </summary>
         internal static string Help325_Jobs {
@@ -221,7 +221,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VsSolutionSort Version: {0}..
+        ///   Looks up a localized string similar to RJCP.VsSolutionSort Version: {0}..
         /// </summary>
         internal static string Version {
             get {
@@ -230,7 +230,7 @@ namespace RJCP.VsSolutionSort.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VsSolutionSort Version: {0}; {1}..
+        ///   Looks up a localized string similar to RJCP.VsSolutionSort Version: {0}; {1}..
         /// </summary>
         internal static string VersionCopyright {
             get {

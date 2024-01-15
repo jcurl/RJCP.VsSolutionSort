@@ -58,7 +58,7 @@ file.
 The format is empirically obtained based on existing samples. Therefore it will
 be incomplete.
 
-```
+```text
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286

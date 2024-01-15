@@ -118,15 +118,15 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="Help100_Description" xml:space="preserve">
-    <value>VsSolutionSort sorts the project entries in a Visual Studio solution file in the order as Visual Studio shows them in the Solution Explorer. Sorting the project entries in the solution file on changes helps users compare similar solution files, such as those often in revision control systems.</value>
+    <value>{3} sorts the project entries in a Visual Studio solution file in the order as Visual Studio shows them in the Solution Explorer. Sorting the project entries in the solution file on changes helps users compare similar solution files, such as those often in revision control systems.</value>
   </data>
   <data name="Help200_Usage" xml:space="preserve">
     <value>Usage:</value>
   </data>
   <data name="Help210_UsageInfo" xml:space="preserve">
-    <value>VsSolutionSort.exe -?|-v
-VsSolutionSort.exe [-d] &lt;input.sln&gt;
-VsSolutionSort.exe [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;]</value>
+    <value>{3} -?|-v
+{3} [-d] &lt;input.sln&gt;
+{3} [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;]</value>
   </data>
   <data name="Help300_Options" xml:space="preserve">
     <value>Options:</value>
@@ -148,7 +148,7 @@ VsSolutionSort.exe [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;]</value>
  Search recursively from the directory given for solution files, *.sln, and sort them.</value>
   </data>
   <data name="Help325_Jobs" xml:space="preserve">
-    <value>{0}j | {1}jobs &lt;int&gt;
+    <value>{0}j | {1}jobs{2}&lt;int&gt;
  Specify the number of threads &lt;int&gt; that should be used when recursing. Default is to use the number of threads in the CPU.</value>
   </data>
   <data name="Help400_Input" xml:space="preserve">
@@ -176,9 +176,9 @@ VsSolutionSort.exe [-d] [-j&lt;N&gt;] -R [&lt;dir&gt;]</value>
     <value>255 - There was an unknown error.</value>
   </data>
   <data name="Version" xml:space="preserve">
-    <value>VsSolutionSort Version: {0}.</value>
+    <value>RJCP.VsSolutionSort Version: {0}.</value>
   </data>
   <data name="VersionCopyright" xml:space="preserve">
-    <value>VsSolutionSort Version: {0}; {1}.</value>
+    <value>RJCP.VsSolutionSort Version: {0}; {1}.</value>
   </data>
 </root>

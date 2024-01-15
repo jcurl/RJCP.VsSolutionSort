@@ -5,6 +5,9 @@ This project is about sorting the contents of a Visual Studio Solution File
 
 - [1. Getting Started](#1-getting-started)
   - [1.1. Installation Requirements](#11-installation-requirements)
+  - [1.2. Using `dotnet tool`](#12-using-dotnet-tool)
+    - [1.2.1. From the NuGet Store](#121-from-the-nuget-store)
+    - [1.2.2. From a Downloaded NuGet Package](#122-from-a-downloaded-nuget-package)
 - [2. Usage Information](#2-usage-information)
   - [2.1. Getting the Version](#21-getting-the-version)
   - [2.2. Getting Command Line Help](#22-getting-command-line-help)
@@ -26,6 +29,47 @@ This project is about sorting the contents of a Visual Studio Solution File
 
 This project targets .NET Core 6.0. Ensure this is installed prior.
 
+### 1.2. Using `dotnet tool`
+
+You can install the build NuGet package. After installing, it is executable with
+the `slnsort` executable.
+
+#### 1.2.1. From the NuGet Store
+
+To install from the NuGet Store:
+
+```cmd
+dotnet tool install --global RJCP.VsSolutionSort
+```
+
+To uninstall:
+
+```cmd
+dotnet tool uninstall --global RJCP.VsSolutionSort
+```
+
+#### 1.2.2. From a Downloaded NuGet Package
+
+To install locally, assuming you've copied the file into a folder called
+`nupkg`:
+
+```cmd
+dotnet tool install --global --add-source ./nupkg RJCP.VsSolutionSort
+```
+
+If you have a prerelease version (usually indicated with extra version
+information after the numbers, like 1.0.0-beta):
+
+```cmd
+dotnet tool install --global --add-source ./nupkg --prerelease RJCP.VsSolutionSort
+```
+
+To uninstall:
+
+```cmd
+dotnet tool uninstall --global RJCP.VsSolutionSort
+```
+
 ## 2. Usage Information
 
 ### 2.1. Getting the Version
@@ -33,8 +77,8 @@ This project targets .NET Core 6.0. Ensure this is installed prior.
 To get the version of the program
 
 ```text
-$ VsSolutionSort.exe --version
-VsSolutionSort Version: 1.0.0-beta.20240113T185144+g1dd2665; (C) 2024, Jason Curl.
+$ dotnet slnsort --version
+RJCP.VsSolutionSort Version: 1.0.0-beta.20240113T185144+g1dd2665; (C) 2024, Jason Curl.
 ```
 
 ### 2.2. Getting Command Line Help
@@ -42,16 +86,16 @@ VsSolutionSort Version: 1.0.0-beta.20240113T185144+g1dd2665; (C) 2024, Jason Cur
 If you need a quick reference to using the program, run on the command line:
 
 ```text
-VsSolutionSort sorts the project entries in a Visual Studio solution file in
+dotnet slnsort sorts the project entries in a Visual Studio solution file in
 the order as Visual Studio shows them in the Solution Explorer. Sorting the
 project entries in the solution file on changes helps users compare similar
 solution files, such as those often in revision control systems.
 
 Usage:
 
-  VsSolutionSort.exe -?|-v
-  VsSolutionSort.exe [-d] <input.sln>
-  VsSolutionSort.exe [-d] [-j<N>] -R [<dir>]
+  dotnet slnsort -?|-v
+  dotnet slnsort [-d] <input.sln>
+  dotnet slnsort [-d] [-j<N>] -R [<dir>]
 
 Options:
 
@@ -65,7 +109,7 @@ Options:
   -R | --recurse
     Search recursively from the directory given for solution files, *.sln, and
     sort them.
-  -j | --jobs <int>
+  -j | --jobs=<int>
     Specify the number of threads <int> that should be used when recursing.
     Default is to use the number of threads in the CPU.
 
@@ -92,7 +136,7 @@ Execute the command from the terminal. Run the command once per solution file
 whose contents you want to sort.
 
 ```cmd
-VsSolutionSort.exe <SolutionSort.sln>
+dotnet slnsort <SolutionSort.sln>
 ```
 
 On output it will *overwrite* the solution file. Ensure that there is a copy of
@@ -105,7 +149,7 @@ If you have a larger project with multiple solution files, you can sort them all
 recursively.
 
 ```cmd
-VsSolutionSort.exe -R
+dotnet slnsort -R
 ```
 
 This will iterate from the current directory, find all solution files, and then
@@ -182,6 +226,10 @@ are able to be parsed, use the option `-d` (or `--dryrun`).
 This will print out the actions as it is loading the solution. This is very
 useful when testing the correctness of any `.solutionsort` file that might be
 present.
+
+```cmd
+dotnet slnsort -dR
+```
 
 ## 3. Sorting Algorithm
 
