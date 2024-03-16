@@ -3,15 +3,24 @@
     using System;
     using System.IO;
     using Resources;
+    using RJCP.Core.Terminal;
 
-    internal static class Help
+    internal class Help
     {
         const string ShortOptionSymbol = "-";
         const string LongOptionSymbol = "--";
         const string AssignmentSymbol = "=";
 
-        private static readonly object ExeNameLock = new ();
+        private static readonly object ExeNameLock = new();
         private static string s_ExeName;
+
+        private readonly ITerminal m_Terminal;
+
+        public Help(ITerminal terminal)
+        {
+            ArgumentNullException.ThrowIfNull(terminal);
+            m_Terminal = terminal;
+        }
 
         private static string ExeName
         {
@@ -36,7 +45,7 @@
             }
         }
 
-        public static void PrintHelp()
+        public void PrintHelp()
         {
             Write(HelpResource.Help100_Description);
             Write();
@@ -67,7 +76,7 @@
             Write();
         }
 
-        public static void PrintSimpleHelp()
+        public void PrintSimpleHelp()
         {
             Write(HelpResource.Help200_Usage);
             Write();
@@ -80,19 +89,20 @@
             Write();
         }
 
-        private static void Write()
+        private void Write()
         {
-            Console.WriteLine();
+            m_Terminal.StdOut.WriteLine(null);
         }
 
-        private static void Write(string line)
+        private void Write(string message)
         {
-            Write(0, 0, line);
+            Write(0, 0, message);
         }
 
-        private static void Write(int indent, int hangingIndent, string line)
+        private void Write(int indent, int hangingIndent, string message)
         {
-            Terminal.WriteLine(indent, hangingIndent, line, ShortOptionSymbol, LongOptionSymbol, AssignmentSymbol, ExeName);
+            m_Terminal.StdOut.WrapLine(indent, hangingIndent - indent,
+                message, ShortOptionSymbol, LongOptionSymbol, AssignmentSymbol, ExeName);
         }
     }
 }

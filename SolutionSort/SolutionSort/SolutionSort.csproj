@@ -18,7 +18,7 @@
     <Copyright>(C) 2024, Jason Curl</Copyright>
     <Company></Company>
     <Description>Sort Visual Studio Solution File contents.</Description>
-    <Version>1.0.0</Version>
+    <Version>1.0.1</Version>
 
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
 
@@ -53,7 +53,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RJCP.Core.CommandLine" Version="0.8.2" />
+    <PackageReference Include="RJCP.Core.CommandLine" Version="0.9.0" />
     <PackageReference Include="RJCP.MSBuildTasks" Version="0.2.4">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -61,13 +61,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Include="CmdLine\Format.cs" />
     <Compile Include="CmdLine\Help.cs" />
     <Compile Include="CmdLine\SolutionOptions.cs" />
-    <Compile Include="CmdLine\Terminal.cs" />
     <Compile Include="CmdLine\Version.cs" />
     <Compile Include="FileSystem\DotSolution.cs" />
     <Compile Include="FileSystem\SolutionScan.cs" />
+    <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Parser\EndGlobalParse.cs" />
     <Compile Include="Parser\EndGlobalSectionParse.cs" />
     <Compile Include="Parser\Global.cs" />

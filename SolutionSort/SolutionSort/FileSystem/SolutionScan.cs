@@ -6,10 +6,19 @@
     using System.IO;
     using System.Threading;
     using System.Threading.Tasks;
+    using RJCP.Core.Terminal;
 
-    internal static class SolutionScan
+    internal class SolutionScan
     {
-        public async static Task<int> ProcessFileAsync(string solutionFile, bool dryRun)
+        private readonly ITerminal m_Terminal;
+
+        public SolutionScan(ITerminal terminal)
+        {
+            ArgumentNullException.ThrowIfNull(terminal);
+            m_Terminal = terminal;
+        }
+
+        public async Task<int> ProcessFileAsync(string solutionFile, bool dryRun)
         {
             var solution = new SortedSolution();
             try {
@@ -20,23 +29,23 @@
                 if (!dryRun)
                     await solution.WriteAsync(solutionFile);
             } catch (SolutionFormatException ex) {
-                CmdLine.Terminal.WriteLine($"ERROR: Failed Parsing '{solutionFile}' - {ex.Message}");
+                m_Terminal.StdOut.WrapLine($"ERROR: Failed Parsing '{solutionFile}' - {ex.Message}");
                 return 1;
             } catch (Exception ex) {
-                CmdLine.Terminal.WriteLine($"ERROR: {ex.Message}");
+                m_Terminal.StdOut.WrapLine($"ERROR: {ex.Message}");
                 return 255;
             }
             return 0;
         }
 
-        public async static Task<int> ProcessDirAsync(string directory, int jobs, bool dryRun)
+        public async Task<int> ProcessDirAsync(string directory, int jobs, bool dryRun)
         {
             IReadOnlyCollection<string> files;
             try {
                 using SolutionPaths pathsSearch = new(directory, jobs);
                 files = await pathsSearch.GetPathsAsync();
             } catch (Exception ex) {
-                CmdLine.Terminal.WriteLine($"ERROR: Problem enumerating directory for files - {ex.Message}");
+                m_Terminal.StdOut.WrapLine($"ERROR: Problem enumerating directory for files - {ex.Message}");
                 return 255;
             }
 

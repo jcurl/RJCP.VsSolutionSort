@@ -1,7 +1,6 @@
 ﻿namespace RJCP.VsSolutionSort
 {
     using System;
-    using System.Runtime.Serialization;
 
     /// <summary>
     /// There is a format error in the solution file that it can't be parsed.
