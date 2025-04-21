@@ -27,7 +27,7 @@ This project is about sorting the contents of a Visual Studio Solution File
 
 ### 1.1. Installation Requirements
 
-This project targets .NET Core 6.0. Ensure this is installed prior.
+This project targets .NET Core 6.0 and 8.0. Ensure this is installed prior.
 
 ### 1.2. Using `dotnet tool`
 

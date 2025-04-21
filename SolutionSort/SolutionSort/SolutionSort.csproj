@@ -50,6 +50,8 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <RevisionControlStrict>true</RevisionControlStrict>
+    <X509SigningCert>signcert.crt</X509SigningCert>
+    <X509TimeStampUri>http://timestamp.digicert.com</X509TimeStampUri>
   </PropertyGroup>
 
   <ItemGroup>
