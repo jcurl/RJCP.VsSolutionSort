@@ -3,13 +3,15 @@
     using System;
     using System.Reflection;
     using Resources;
+    using RJCP.Core.CommandLine;
     using RJCP.Core.Terminal;
 
     internal class Version
     {
-        private readonly ITerminal m_Terminal;
         private static readonly object Lock = new();
         private static string AssemblyVersion;
+
+        private readonly ITerminal m_Terminal;
 
         public Version(ITerminal terminal)
         {

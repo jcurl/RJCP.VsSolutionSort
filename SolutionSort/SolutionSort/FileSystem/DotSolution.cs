@@ -119,7 +119,7 @@
                 using FileStream fs = new(m_FileName, FileMode.Open, FileAccess.Read, FileShare.Read);
                 using StreamReader reader = new(fs, Encoding.UTF8);
                 while (true) {
-                    string line = reader.ReadLine();
+                    string line = await reader.ReadLineAsync();
                     if (line is null) break;
                     line = line.Trim();
 

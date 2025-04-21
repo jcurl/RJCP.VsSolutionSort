@@ -3,24 +3,30 @@
     using System;
     using System.IO;
     using Resources;
+    using RJCP.Core.CommandLine;
     using RJCP.Core.Terminal;
 
     internal class Help
     {
-        const string ShortOptionSymbol = "-";
-        const string LongOptionSymbol = "--";
-        const string AssignmentSymbol = "=";
-
         private static readonly object ExeNameLock = new();
         private static string s_ExeName;
 
+        private readonly Options m_Options;
         private readonly ITerminal m_Terminal;
 
-        public Help(ITerminal terminal)
+        public Help(Options options, ITerminal terminal)
         {
+            ArgumentNullException.ThrowIfNull(options);
             ArgumentNullException.ThrowIfNull(terminal);
+            m_Options = options;
             m_Terminal = terminal;
         }
+
+        private string ShortOptionSymbol { get { return m_Options.ShortOptionPrefix; } }
+
+        private string LongOptionSymbol { get { return m_Options.LongOptionPrefix; } }
+
+        private string AssignmentSymbol { get { return m_Options.AssignmentSymbol; } }
 
         private static string ExeName
         {
@@ -91,7 +97,7 @@
 
         private void Write()
         {
-            m_Terminal.StdOut.WriteLine(null);
+            m_Terminal.StdOut.WriteLine();
         }
 
         private void Write(string message)

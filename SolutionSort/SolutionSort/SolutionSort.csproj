@@ -15,7 +15,7 @@
     <RootNamespace>RJCP.VsSolutionSort</RootNamespace>
 
     <Authors>Jason Curl</Authors>
-    <Copyright>(C) 2024, Jason Curl</Copyright>
+    <Copyright>(C) 2024-2025, Jason Curl</Copyright>
     <Company></Company>
     <Description>Sort Visual Studio Solution File contents.</Description>
     <Version>1.0.1</Version>
@@ -53,11 +53,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="RJCP.Core.CommandLine" Version="0.9.0" />
-    <PackageReference Include="RJCP.MSBuildTasks" Version="0.2.4">
+    <PackageReference Include="RJCP.Core.CommandLine" Version="0.9.1" />
+    <PackageReference Include="RJCP.MSBuildTasks" Version="0.2.5">
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="CSharpIsNullAnalyzer" Version="0.1.495" PrivateAssets="all" />
+    <PackageReference Include="CSharpIsNullAnalyzer" Version="0.1.593" PrivateAssets="all" />
   </ItemGroup>
 
   <ItemGroup>
